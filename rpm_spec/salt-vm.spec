@@ -1,5 +1,7 @@
 
 %{!?version: %define version %(cat version)}
+%{!?rel: %define rel %(cat rel)}
+%define _sourcedir %(pwd)
 
 %if ! (0%{?rhel} >= 6 || 0%{?fedora} > 12)
 %global with_python26 1
@@ -19,14 +21,17 @@
 
 Name: salt
 Version: %{version}
-Release: 1%{?dist}
+#Release: 1%{?dist}
+Release: %{rel}%{?dist}
 Summary: A parallel remote execution system
 
 Group:   System Environment/Daemons
 License: ASL 2.0
 URL:     http://saltstack.org/
-Source0: http://pypi.python.org/packages/source/s/%{name}/%{name}-%{version}.tar.gz
-Source1: https://pypi.python.org/packages/source/S/%{_salttesting}/%{_salttesting}-%{_salttesting_ver}.tar.gz
+#Source0: http://pypi.python.org/packages/source/s/%{name}/%{name}-%{version}.tar.gz
+#Source1: https://pypi.python.org/packages/source/S/%{_salttesting}/%{_salttesting}-%{_salttesting_ver}.tar.gz
+Source0: %{name}-%{version}.tar.gz
+Source1: %{_salttesting}-%{_salttesting_ver}.tar.gz
 Source2: %{name}-master
 Source3: %{name}-syndic
 Source4: %{name}-minion
@@ -37,7 +42,11 @@ Source8: %{name}-minion.service
 Source9: %{name}-api.service
 Source10: README.fedora
 Source11: logrotate.salt
-Patch0:  skip_tests_%{version}.patch
+
+#Patch0:  skip_tests_%{version}.patch
+Source98: apply-patches
+Source99: series-vm.conf
+Source100: patches.salt
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
@@ -187,8 +196,10 @@ of an agent (salt-minion) service.
 %setup -c
 %setup -T -D -a 1
 
-cd %{name}-%{version}
-%patch0 -p1
+# Apply patches
+#cd %{name}-%{version}
+#%patch0 -p1
+%{SOURCE98} %{SOURCE99} %{_sourcedir}
 
 %build
 
