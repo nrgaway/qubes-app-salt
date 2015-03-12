@@ -1,13 +1,16 @@
-ifeq ($(PACKAGE_SET),vm)
-  ifneq ($(filter $(DISTRIBUTION), debian),)
-    DEBIAN_BUILD_DIRS := debian.debian/debian
-    SOURCE_COPY_IN := source-debian-quilt-copy-in
-  else ifneq ($(filter $(DISTRIBUTION), qubuntu),)
-    DEBIAN_BUILD_DIRS := debian.qubuntu/debian
-    SOURCE_COPY_IN := source-debian-quilt-copy-in
-  endif
+ifeq ($(PACKAGE_SET),dom0)
+  RPM_SPEC_FILES := rpm_spec/salt-dom0.spec
 
-  RPM_SPEC_FILES := rpm_spec/qubes-salt.spec
+else ifeq ($(PACKAGE_SET),vm)
+  #ifneq ($(filter $(DISTRIBUTION), debian),)
+  #  DEBIAN_BUILD_DIRS := debian.debian/debian
+  #  SOURCE_COPY_IN := source-debian-quilt-copy-in
+  #else ifneq ($(filter $(DISTRIBUTION), qubuntu),)
+  #  DEBIAN_BUILD_DIRS := debian.qubuntu/debian
+  #  SOURCE_COPY_IN := source-debian-quilt-copy-in
+  #endif
+
+  RPM_SPEC_FILES := rpm_spec/salt-vm.spec
 endif
 
 source-debian-quilt-copy-in: DEBIAN = $(DEBIAN_BUILD_DIRS)/..

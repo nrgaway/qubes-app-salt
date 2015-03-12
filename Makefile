@@ -37,8 +37,8 @@ rpms: rpms-vm
 rpms-dom0:
 
 rpms-vm:
-	rpmbuild --define "_rpmdir rpm/" -bb rpm_spec/qubes-salt.spec
-	rpm --addsign rpm/x86_64/qubes-salt*$(VERSION)*.rpm
+	rpmbuild --define "_rpmdir rpm/" -bb rpm_spec/salt.spec
+	rpm --addsign rpm/x86_64/salt*$(VERSION)*.rpm
 
 clean:
 	rm -f install.rdf
@@ -46,25 +46,25 @@ clean:
 update-repo-current:
 	for vmrepo in ../yum/current-release/current/vm/* ; do \
 		dist=$$(basename $$vmrepo) ;\
-		ln -f $(RPMS_DIR)/x86_64/qubes-salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
+		ln -f $(RPMS_DIR)/x86_64/salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
 	done
 
 update-repo-current-testing:
 	for vmrepo in ../yum/current-release/current-testing/vm/* ; do \
 		dist=$$(basename $$vmrepo) ;\
-		ln -f $(RPMS_DIR)/x86_64/qubes-salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
+		ln -f $(RPMS_DIR)/x86_64/salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
 	done
 
 update-repo-unstable:
 	for vmrepo in ../yum/current-release/unstable/vm/* ; do \
 		dist=$$(basename $$vmrepo) ;\
-		ln -f $(RPMS_DIR)/x86_64/qubes-salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
+		ln -f $(RPMS_DIR)/x86_64/salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
 	done
 
 update-repo-template:
 	for vmrepo in ../template-builder/yum_repo_qubes/* ; do \
 		dist=$$(basename $$vmrepo) ;\
-		ln -f $(RPMS_DIR)/x86_64/qubes-salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
+		ln -f $(RPMS_DIR)/x86_64/salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
 	done
 
 install-vm:
