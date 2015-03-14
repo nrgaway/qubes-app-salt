@@ -1,7 +1,8 @@
-ifeq ($(PACKAGE_SET),dom0)
-  RPM_SPEC_FILES := rpm_spec/salt-dom0.spec
-
-else ifeq ($(PACKAGE_SET),vm)
+#ifeq ($(PACKAGE_SET),dom0)
+#  RPM_SPEC_FILES := rpm_spec/salt-dom0.spec
+#
+#else ifeq ($(PACKAGE_SET),vm)
+ifeq ($(PACKAGE_SET),vm)
   #ifneq ($(filter $(DISTRIBUTION), debian),)
   #  DEBIAN_BUILD_DIRS := debian.debian/debian
   #  SOURCE_COPY_IN := source-debian-quilt-copy-in
