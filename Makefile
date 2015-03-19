@@ -32,16 +32,15 @@ help:
 	    echo "make update-repo-unstable <-- same, but to -testing repo";\
 	    @exit 0;
 
-rpms: rpms-vm
-
-rpms-dom0:
-
-rpms-vm:
+rpms:
 	rpmbuild --define "_rpmdir rpm/" -bb rpm_spec/salt.spec
 	rpm --addsign rpm/x86_64/salt*$(VERSION)*.rpm
 
-clean:
-	rm -f install.rdf
+rpms-dom0: rpms
+	@true
+
+rpms-vm: rpms
+	@true
 
 update-repo-current:
 	for vmrepo in ../yum/current-release/current/vm/* ; do \
@@ -67,5 +66,3 @@ update-repo-template:
 		ln -f $(RPMS_DIR)/x86_64/salt*$(VERSION)*$$dist*.rpm $$vmrepo/rpm/ ;\
 	done
 
-install-vm:
-	install -d $(DESTDIR)/$(EXTDIR)
