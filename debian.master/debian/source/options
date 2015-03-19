@@ -1,0 +1,1 @@
+extend-diff-ignore=.*|tests/integration/files/file/extend-diff-ignore = "(^|/)(.git/.*)$"extend-diff-ignore = "(^|/)(deb/.*)$"extend-diff-ignore = "(^|/)(pkgs/.*)$"extend-diff-ignore = "(^|/)(rpm/.*)$"

@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+include /usr/share/python/python.mk
+
+export LC_ALL=C
+export SHELL=/bin/bash -e
+
+# Where do we find the common configuration.
+# export DROOT=debian
+
+%:
+	dh $@ --with python2,bash-completion --with=systemd
+
+override_dh_auto_build:
+	dh_auto_build
+
+override_dh_auto_clean:
+	dh_auto_clean
