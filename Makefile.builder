@@ -2,11 +2,8 @@ ifeq ($(PACKAGE_SET),dom0)
   RPM_SPEC_FILES := rpm_spec/salt.spec
 
 else ifeq ($(PACKAGE_SET),vm)
-  ifneq ($(filter $(DISTRIBUTION), debian),)
+  ifneq ($(filter $(DISTRIBUTION), debian qubuntu),)
     DEBIAN_BUILD_DIRS := debian.master/debian
-    SOURCE_COPY_IN := source-debian-quilt-copy-in
-  else ifneq ($(filter $(DISTRIBUTION), qubuntu),)
-    DEBIAN_BUILD_DIRS := debian-vm/debian
     SOURCE_COPY_IN := source-debian-quilt-copy-in
   endif
 
