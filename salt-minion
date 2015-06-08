@@ -68,7 +68,7 @@ start() {
             RETVAL=$?
             echo -n "already running"
         else
-            daemon --check $SERVICE $SALTMINION -d $MINION_ARGS 
+            daemon --check $SERVICE $SALTMINION -d $MINION_ARGS
         fi
     fi
     RETVAL=$?
@@ -94,16 +94,6 @@ stop() {
     else
         killproc $PROCESS
         RETVAL=$?
-        # tidy up any rogue processes:
-        PROCS=`ps -ef | grep "$SALTMINION" | grep -v grep | awk '{print $2}'`
-        if [ -n "$PROCS" ]; then
-            kill $PROCS &> /dev/null
-            sleep 1
-            PROCS=`ps -ef | grep "$SALTMINION" | grep -v grep | awk '{print $2}'`
-            if [ -n "$PROCS" ]; then
-                kill -9 $PROCS &> /dev/null
-            fi
-        fi
     fi
     echo
 }

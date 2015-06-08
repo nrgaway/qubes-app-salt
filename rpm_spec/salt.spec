@@ -16,7 +16,7 @@
 %{!?pythonpath: %global pythonpath %(%{__python} -c "import os, sys; print(os.pathsep.join(x for x in sys.path if x))")}
 
 %define _salttesting SaltTesting
-%define _salttesting_ver 2015.2.16
+%define _salttesting_ver 2015.5.8
 
 Name: salt
 Version: %{version}
@@ -42,7 +42,7 @@ Source9: %{name}-api.service
 Source10: README.fedora
 Source11: logrotate.salt
 
-#Patch0:  skip_tests_%{version}.patch
+#Patch0:  salt-%{version}-tests.patch
 Source98: apply-patches
 Source99: series-vm.conf
 Source100: patches.salt
@@ -55,6 +55,7 @@ Requires: dmidecode
 #%endif
 
 Requires: pciutils
+Requires: which
 Requires: yum-utils
 
 %if 0%{?with_python26}
@@ -169,6 +170,7 @@ infrastructure.
 Summary: REST API for Salt, a parallel remote execution system
 Group:   System administration tools
 Requires: %{name}-master = %{version}-%{release}
+Requires: python-cherrypy
 
 %description api
 salt-api provides a REST interface to the Salt master.
@@ -177,6 +179,7 @@ salt-api provides a REST interface to the Salt master.
 Summary: Cloud provisioner for Salt, a parallel remote execution system
 Group:   System administration tools
 Requires: %{name}-master = %{version}-%{release}
+Requires: python-libcloud
 
 %description cloud
 The salt-cloud tool provisions new cloud VMs, installs salt-minion on them, and
@@ -198,7 +201,7 @@ of an agent (salt-minion) service.
 # Apply patches
 #cd %{name}-%{version}
 #%patch0 -p1
-%{SOURCE98} %{SOURCE99} %{_sourcedir}
+#%{SOURCE98} %{SOURCE99} %{_sourcedir}
 
 %build
 
@@ -235,6 +238,13 @@ install -p -m 0644 %{SOURCE6} %{buildroot}%{_unitdir}/
 install -p -m 0644 %{SOURCE7} %{buildroot}%{_unitdir}/
 install -p -m 0644 %{SOURCE8} %{buildroot}%{_unitdir}/
 install -p -m 0644 %{SOURCE9} %{buildroot}%{_unitdir}/
+%endif
+
+# Force python2.6 on EPEL6
+# https://github.com/saltstack/salt/issues/22003
+%if 0%{?rhel} == 6
+sed -i 's#/usr/bin/python#/usr/bin/python2.6#g' %{buildroot}%{_bindir}/salt*
+sed -i 's#/usr/bin/python#/usr/bin/python2.6#g' %{buildroot}%{_initrddir}/salt*
 %endif
 
 install -p %{SOURCE10} .
@@ -449,6 +459,30 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu Jun  4 2015 Erik Johnson <erik@saltstack.com> - 2015.5.2-2
+- Update skipped tests
+
+* Thu Jun  4 2015 Erik Johnson <erik@saltstack.com> - 2015.5.2-1
+- Update to bugfix release 2015.5.2
+
+* Mon Jun  1 2015 Erik Johnson <erik@saltstack.com> - 2015.5.1-2
+- Add missing dependency on which (RH #1226636)
+
+* Wed May 27 2015 Erik Johnson <erik@saltstack.com> - 2015.5.1-1
+- Update to bugfix release 2015.5.1
+
+* Mon May 11 2015 Erik Johnson <erik@saltstack.com> - 2015.5.0-1
+- Update to feature release 2015.5.0
+
+* Fri Apr 17 2015 Erik Johnson <erik@saltstack.com> - 2014.7.5-1
+- Update to bugfix release 2014.7.5
+
+* Tue Apr  7 2015 Erik Johnson <erik@saltstack.com> - 2014.7.4-4
+- Fix RH bug #1210316 and Salt bug #22003
+
+* Tue Apr  7 2015 Erik Johnson <erik@saltstack.com> - 2014.7.4-2
+- Update to bugfix release 2014.7.4
+
 * Tue Feb 17 2015 Erik Johnson <erik@saltstack.com> - 2014.7.2-1
 - Update to bugfix release 2014.7.2
 
@@ -479,11 +513,14 @@ rm -rf %{buildroot}
 * Thu Jul 10 2014 Erik Johnson <erik@saltstack.com> - 2014.1.7-3
 - Add logrotate script
 
-* Thu Jul 10 2014 Erik Johnson <erik@saltstack.com> - 2014.1.7-2
+* Thu Jul 10 2014 Erik Johnson <erik@saltstack.com> - 2014.1.7-1
 - Update to bugfix release 2014.1.7
 
 * Wed Jun 11 2014 Erik Johnson <erik@saltstack.com> - 2014.1.5-1
 - Update to bugfix release 2014.1.5
+
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2014.1.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
 * Tue May  6 2014 Erik Johnson <erik@saltstack.com> - 2014.1.4-1
 - Update to bugfix release 2014.1.4
