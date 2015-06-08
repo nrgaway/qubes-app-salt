@@ -1,8 +1,0 @@
-NOTES
-=====
-
-apply-patches:
-  -/home/user/qubes-src/app-salt/patches.salt/skip_tests_2014.7.2.patch
-	## XXX: Had to remove options for successful patch...
-	##      Need to re-create patch
-	# sed "s|^|patch -s -F0 -E -p1 --no-backup-if-mismatch -i $PATCH_DIR/|"
