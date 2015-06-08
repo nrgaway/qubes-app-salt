@@ -15,6 +15,14 @@ export SHELL=/bin/bash -e
 
 override_dh_auto_build:
 	dh_auto_build
+	make -C doc html
+	make -C doc man
 
 override_dh_auto_clean:
+	make -C doc clean
 	dh_auto_clean
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 2750 debian/salt-common/var/log/salt
+	chown root:adm debian/salt-common/var/log/salt

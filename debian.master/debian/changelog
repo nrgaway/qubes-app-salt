@@ -1,6 +1,37 @@
-salt (2014.7.2-1) experimental; urgency=medium
+salt (2015.5.2-2) unstable; urgency=medium
+
+  * Bump version for Qubes
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 07 Jun 2015 21:39:04 -0400
+
+salt (2015.5.0+ds-1) unstable; urgency=medium
+
+  * [52d8863] Imported Upstream version 2015.5.0+ds. Closes: 783300
+  * [bd5ad46] Updated patches for 2015.5. Closes: 777664
+
+ -- Joe Healy <joehealy@gmail.com>  Mon, 11 May 2015 21:53:01 +1000
+
+salt (2014.7.5+ds-1) unstable; urgency=medium
+
+  * [f41091a] Imported Upstream version 2014.7.5+ds
+
+ -- Joe Healy <joehealy@gmail.com>  Tue, 21 Apr 2015 11:46:27 +1000
+
+salt (2014.7.4+ds-1) UNRELEASED; urgency=medium
+
+  [ Benjamin Drung ]
+  * [c1f16f3] debian/changelog: Use capital UNRELEASED
+  * [48334b4] Point Vcs-Browser to cgit instead of gitweb.
+  * [b9e3de4] Remove unused ${shlibs:Depends} dependencies
 
   [ Joe Healy ]
+  * [510c0d1] Imported Upstream version 2014.7.4+ds
+  * [8489807] Updated doc patches
+
+ -- Joe Healy <joehealy@gmail.com>  Wed, 15 Apr 2015 23:08:49 +1000
+
+salt (2014.7.2+ds-1) experimental; urgency=medium
+
   * [dc3a14e] Added python-debian as dependency for package version tracking
   * [9de90f3] Updated changelog to relabel versions that were not uploaded
   * [984a676] Updated watch file to use pypi redirector
@@ -11,22 +42,22 @@ salt (2014.7.2-1) experimental; urgency=medium
   * [9ef435b] Make log file readable by adm user. Closes: 777664
   * [1feadd6] Refreshed lintian overrides and added comments as to their need
 
- -- Jason Mehring <nrgaway@gmail.com>  Wed, 18 Mar 2015 20:55:01 -0400
+ -- Joe Healy <joehealy@gmail.com>  Tue, 17 Mar 2015 20:07:43 +1100
 
-salt (2014.7.1+ds-3) unreleased; urgency=medium
+salt (2014.7.1+ds-3) UNRELEASED; urgency=medium
 
   * [70d659a] Fixed salt-api upstart script
 
  -- Joe Healy <joehealy@gmail.com>  Tue, 10 Feb 2015 11:20:12 +1100
 
-salt (2014.7.1+ds-2) unreleased; urgency=medium
+salt (2014.7.1+ds-2) UNRELEASED; urgency=medium
 
   * [87971d4] Added dependency on python-dateutil
   * [cb9b2e2] Added init.d, systemd and upstart files for salt-api
 
  -- Joe Healy <joehealy@gmail.com>  Thu, 05 Feb 2015 17:22:45 +1100
 
-salt (2014.7.1+ds-1) unreleased; urgency=medium
+salt (2014.7.1+ds-1) UNRELEASED; urgency=medium
 
   * [77a2f91] Imported Upstream version 2014.7.1+ds
   * [7525339] Refreshed patches for 2014.7.1
@@ -47,21 +78,6 @@ salt (2014.7.0+ds-1) experimental; urgency=medium
   * [0ac1a0c] Updated dependencies for initial 2014.7 release
 
  -- Joe Healy <joehealy@gmail.com>  Wed, 12 Nov 2014 10:36:31 +1100
-
-salt (2014.1.13+ds-3) unstable; urgency=medium
-
-  * [5273cd4] Added python-msgpack dependency. Closes: 777665
-
- -- Joe Healy <joehealy@gmail.com>  Fri, 13 Feb 2015 16:27:17 +1100
-
-salt (2014.1.13+ds-2) unstable; urgency=medium
-
-  * [da66ee3] Addition of patch to ensure systemd service functionality works
-    (Closes: 770174)
-  * [6a17bb9] Added patch to prevent crash when unicode text is output from salt
-    (Closes: 770909)
-
- -- Joe Healy <joehealy@gmail.com>  Thu, 27 Nov 2014 15:49:13 +1100
 
 salt (2014.1.13+ds-1) unstable; urgency=medium
 

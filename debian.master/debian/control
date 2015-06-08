@@ -5,7 +5,7 @@ Maintainer: Debian Salt Team <pkg-salt-team@lists.alioth.debian.org>
 Uploaders: Joe Healy <joehealy@gmail.com>,
            Franklin G Mendoza <franklin.g.mendoza@gmail.com>,
            Andriy Senkovych <jolly_roger@itblog.org.ua>,
-	   Jason Mehring <nrgaway@gmail.com>
+	       Jason Mehring <nrgaway@gmail.com>
 Build-Depends: debhelper (>= 9.20120410~),
                bash-completion,
                python | python-all | python-dev | python-all-dev,
@@ -17,14 +17,13 @@ Build-Depends: debhelper (>= 9.20120410~),
 Standards-Version: 3.9.6
 Homepage: http://saltstack.org/
 X-Python-Version: 2.7
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-salt/salt.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-salt/salt.git
 Vcs-Git: git://anonscm.debian.org/pkg-salt/salt.git
 
 Package: salt-common
 Architecture: all
 Depends: ${python:Depends},
          ${misc:Depends},
-         ${shlibs:Depends},
          python,
          python-dateutil,
          python-jinja2,
@@ -214,7 +213,6 @@ Package: salt-api
 Architecture: all
 Depends: ${python:Depends},
          ${misc:Depends},
-         ${shlibs:Depends},
          python,
          salt-master
 Recommends: python-cherrypy3
@@ -226,4 +224,5 @@ Description: Generic, modular network access system
  The Salt API system is used to expose the fundamental aspects of Salt control
  to external sources. salt-api acts as the bridge between Salt itself and
  REST, Websockets, etc.
+
 
