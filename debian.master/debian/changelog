@@ -1,3 +1,17 @@
+salt (2015.5.2-2) --release; urgency=medium
+
+  * Removed files related to v2104.7.2
+  * Update version and release
+  * Change generic copy-in reference to refer to salt
+  * Remove old NOTES
+  * Debian releated package changes for 2015.5.2
+  * Fedora base package changes for 2015.5.2
+  * Salt 2015.5.2 sources
+  * Soft link rel from debian.master to assist in changelog updates
+  * Moved upstream log into own changelog
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 08 Jun 2015 01:21:06 -0400
+
 salt (2014.7.2-1) experimental; urgency=medium
 
   * Initial Package creation for Salt v2014.7.2
