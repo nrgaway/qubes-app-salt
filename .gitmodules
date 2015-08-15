@@ -1,0 +1,4 @@
+[submodule "salt"]
+	path = salt
+	url = https://github.com/saltstack/salt.git
+	branch = 2015.5
