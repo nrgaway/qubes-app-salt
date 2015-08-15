@@ -15,3 +15,9 @@ rpms-dom0:
 rpms-vm:
 	PACKAGE_SET=vm rpmbuild --define "_rpmdir $(RPMS_DIR)" -bb rpm_spec/salt.spec
 
+get-sources:
+	git submodule init
+	git submodule update
+
+verify-sources:
+	@true
