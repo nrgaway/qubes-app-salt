@@ -15,9 +15,6 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %{!?pythonpath: %global pythonpath %(%{__python} -c "import os, sys; print(os.pathsep.join(x for x in sys.path if x))")}
 
-#%define _salttesting SaltTesting
-#%define _salttesting_ver 2015.7.10
-
 Name: salt
 Version: %{version}
 Release: %{rel}%{?dist}
@@ -43,35 +40,37 @@ Requires: dmidecode
 Requires: pciutils
 Requires: which
 Requires: yum-utils
+Requires: python-tornado
 
 %if 0%{?with_python26}
 
 BuildRequires: python26-devel
-BuildRequires: python26-six
 Requires: python26-crypto
 Requires: python26-jinja2
-Requires: python26-msgpack > 0.3
+Requires: python26-m2crypto
+Requires: python26-msgpack
 Requires: python26-PyYAML
-Requires: python26-requests >= 1.0.0
+Requires: python26-requests
 Requires: python26-zmq
-Requires: python26-six
 
 %else
 
 %if ((0%{?rhel} >= 6 || 0%{?fedora} > 12) && 0%{?include_tests})
+BuildRequires: m2crypto
 BuildRequires: python-crypto
 BuildRequires: python-jinja2
-BuildRequires: python-msgpack > 0.3
+BuildRequires: python-msgpack
 BuildRequires: python-pip
 BuildRequires: python-zmq
 BuildRequires: PyYAML
+BuildRequires: python-requests
+BuildRequires: python-unittest2
 # this BR causes windows tests to happen
 # clearly, that's not desired
 # https://github.com/saltstack/salt/issues/3749
 BuildRequires: python-mock
 BuildRequires: git
 BuildRequires: python-libcloud
-BuildRequires: python-six
 
 %if ((0%{?rhel} == 6) && 0%{?include_tests})
 # argparse now a salt-testing requirement
@@ -81,21 +80,13 @@ BuildRequires: python-argparse
 %endif
 
 BuildRequires: python-devel
-#BuildRequires: python-tornado >= 4.2.1
-BuildRequires: python-tornado
-BuildRequires: python-futures >= 2.0
+Requires: m2crypto
 Requires: python-crypto
 Requires: python-jinja2
-Requires: python-msgpack > 0.3
+Requires: python-msgpack
 Requires: PyYAML
-Requires: python-requests >= 1.0.0
+Requires: python-requests
 Requires: python-zmq
-Requires: python-markupsafe
-#Requires: python-tornado >= 4.2.1
-Requires: python-tornado
-Requires: python-futures >= 2.0
-Requires: python-six
-
 
 %endif
 
@@ -189,7 +180,6 @@ of an agent (salt-minion) service.
 
 %prep
 %setup -c
-#%setup -T -D -a 1
 
 # Apply patches
 #cd %{name}-%{version}
@@ -201,7 +191,6 @@ of an agent (salt-minion) service.
 %install
 echo "BUILDROOT: " %{buildroot}
 rm -rf %{buildroot}
-#cd $RPM_BUILD_DIR/%{name}-%{version}/%{name}-%{version}
 cd $RPM_BUILD_DIR/%{name}-%{version}
 %{__python} setup.py install -O1 --root %{buildroot}
 
@@ -241,38 +230,24 @@ sed -i 's#/usr/bin/python#/usr/bin/python2.6#g' %{buildroot}%{_bindir}/salt*
 sed -i 's#/usr/bin/python#/usr/bin/python2.6#g' %{buildroot}%{_initrddir}/salt*
 %endif
 
-# Logrotate
-install -p pkg/rpm/README.fedora .	
+install -p pkg/rpm/README.fedora .
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d/
-install -p -m 0644 pkg/salt-common.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/salt
+install -p -m 0644 pkg/rpm/logrotate.salt %{buildroot}%{_sysconfdir}/logrotate.d/salt
 
-# Bash completion
-mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/
-install -p -m 0644 pkg/salt.bash %{buildroot}%{_sysconfdir}/bash_completion.d/salt.bash
-
-%if ((0%{?rhel} >= 6 || 0%{?fedora} > 12) && 0%{?include_tests})
-%check
-cd $RPM_BUILD_DIR/%{name}-%{version}/%{name}-%{version}
-mkdir %{_tmppath}/salt-test-cache
-PYTHONPATH=%{pythonpath}:$RPM_BUILD_DIR/%{name}-%{version}/%{_salttesting}-%{_salttesting_ver} %{__python} setup.py test --runtests-opts=-u
-%endif
+# Missing from python setup...
+install -p -m 0644 doc/man/spm.1 %{buildroot}%{_mandir}/man1/spm.1
 
 %clean
 rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-#%doc $RPM_BUILD_DIR/%{name}-%{version}/%{name}-%{version}/LICENSE
 %doc $RPM_BUILD_DIR/%{name}-%{version}/LICENSE
 %{python_sitelib}/%{name}/*
-#%{python_sitelib}/%{name}-%{version}-py?.?.egg-info
 %{python_sitelib}/%{name}-*-py?.?.egg-info
 %{_sysconfdir}/logrotate.d/salt
-%{_sysconfdir}/bash_completion.d/salt.bash
 %{_var}/cache/salt
-#%doc $RPM_BUILD_DIR/%{name}-%{version}/%{name}-%{version}/README.fedora
 %doc $RPM_BUILD_DIR/%{name}-%{version}/README.fedora
-%{_bindir}/spm
 
 %files master
 %defattr(-,root,root)
@@ -299,10 +274,14 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc %{_mandir}/man1/salt-call.1.*
 %doc %{_mandir}/man1/salt-minion.1.*
-%doc %{_mandir}/man1/salt-proxy.1.*
+%doc %{_mandir}/man1/salt-unity.1.*
+%doc %{_mandir}/man1/spm.1.*
+#%doc %{_mandir}/man1/salt-proxy.1.*
 %{_bindir}/salt-minion
 %{_bindir}/salt-call
-%{_bindir}/salt-proxy
+#%{_bindir}/salt-proxy
+%{_bindir}/salt-unity
+%{_bindir}/spm
 %if ! (0%{?rhel} >= 7 || 0%{?fedora} >= 15)
 %attr(0755, root, root) %{_initrddir}/salt-minion
 %else
@@ -342,7 +321,7 @@ rm -rf %{buildroot}
 %files ssh
 %doc %{_mandir}/man1/salt-ssh.1.*
 %{_bindir}/salt-ssh
-%config(noreplace) %{_sysconfdir}/salt/roster
+%{_sysconfdir}/salt/roster
 
 
 # less than RHEL 8 / Fedora 16
@@ -464,21 +443,6 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Fri Sep  4 2015 SaltStack Packaging Team <packaging@saltstack.com> - 2015.8.0-1
-- Update to feature release 2015.8.0
-
-* Fri Jul 10 2015 Erik Johnson <erik@saltstack.com> - 2015.5.3-4
-- Patch tests
-
-* Fri Jul 10 2015 Erik Johnson <erik@saltstack.com> - 2015.5.3-3
-- Patch init grain
-
-* Fri Jul 10 2015 Erik Johnson <erik@saltstack.com> - 2015.5.3-2
-- Update to bugfix release 2015.5.3, add bash completion
-
-* Thu Jun  4 2015 Erik Johnson <erik@saltstack.com> - 2015.5.2-3
-- Mark salt-ssh roster as a config file to prevent replacement
-
 * Thu Jun  4 2015 Erik Johnson <erik@saltstack.com> - 2015.5.2-2
 - Update skipped tests
 
@@ -511,9 +475,6 @@ rm -rf %{buildroot}
 
 * Fri Nov  7 2014 Erik Johnson <erik@saltstack.com> - 2014.7.0-3
 - Make salt-api its own package
-
-* Thu Nov  6 2014 Erik Johnson <erik@saltstack.com> - 2014.7.0-2
-- Fix changelog
 
 * Thu Nov  6 2014 Erik Johnson <erik@saltstack.com> - 2014.7.0-1
 - Update to feature release 2014.7.0
