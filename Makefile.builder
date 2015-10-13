@@ -1,23 +1,33 @@
 ifeq ($(PACKAGE_SET),dom0)
   RPM_SPEC_FILES := rpm_spec/salt.spec
+  SOURCE_COPY_IN := source-copy-in-fedora-mgmt-salt-app-saltstack
 
 else ifeq ($(PACKAGE_SET),vm)
   ifneq ($(filter $(DISTRIBUTION), debian qubuntu),)
     DEBIAN_BUILD_DIRS := debian.master/debian
-    SOURCE_COPY_IN := source-debian-salt-copy-in
+    SOURCE_COPY_IN := source-copy-in-debian-mgmt-salt-app-saltstack
+  else
+    RPM_SPEC_FILES := rpm_spec/salt.spec
+    SOURCE_COPY_IN := source-copy-in-fedora-mgmt-salt-app-saltstack
   endif
-
-  RPM_SPEC_FILES := rpm_spec/salt.spec
 endif
 
-source-debian-salt-copy-in: DEBIAN = $(DEBIAN_BUILD_DIRS)/..
-source-debian-salt-copy-in: VERSION = $(shell $(DEBIAN_PARSER) changelog --package-version $(ORIG_SRC)/$(DEBIAN_BUILD_DIRS)/changelog)
-source-debian-salt-copy-in: NAME = $(shell $(DEBIAN_PARSER) changelog --package-name $(ORIG_SRC)/$(DEBIAN_BUILD_DIRS)/changelog)
-source-debian-salt-copy-in: PACKAGE_TGZ = "$(CHROOT_DIR)/$(DIST_SRC)/$(NAME)-$(VERSION).tar.gz"
-source-debian-salt-copy-in: PACKAGE_ORIG_TGZ = "$(CHROOT_DIR)/$(DIST_SRC)/$(NAME)_$(VERSION).orig.tar.gz"
-source-debian-salt-copy-in:
+source-copy-in-fedora-mgmt-salt-app-saltstack: VERSION = $(shell cat $(ORIG_SRC)/version)
+source-copy-in-fedora-mgmt-salt-app-saltstack: NAME = salt
+source-copy-in-fedora-mgmt-salt-app-saltstack: SRC_FILE = "$(CHROOT_DIR)/$(DIST_SRC)/$(NAME)-$(VERSION).tar.gz"
+source-copy-in-fedora-mgmt-salt-app-saltstack:
+	$(shell cd $(ORIG_SRC); git submodule init)
+	$(shell cd $(ORIG_SRC); git submodule update)
+	tar cfz $(SRC_FILE) --exclude-vcs -C $(CHROOT_DIR)/$(DIST_SRC)/salt .
+
+source-copy-in-debian-mgmt-salt-app-saltstack: VERSION = $(shell cat $(ORIG_SRC)/version)
+source-copy-in-debian-mgmt-salt-app-saltstack: NAME = $(shell $(DEBIAN_PARSER) changelog --package-name $(ORIG_SRC)/$(DEBIAN_BUILD_DIRS)/changelog)
+source-copy-in-debian-mgmt-salt-app-saltstack: ORIG_FILE = "$(CHROOT_DIR)/$(DIST_SRC)/$(NAME)_$(VERSION).orig.tar.gz"
+source-copy-in-debian-mgmt-salt-app-saltstack:
+	$(shell cd $(ORIG_SRC); git submodule init)
+	$(shell cd $(ORIG_SRC); git submodule update)
 	-$(shell $(ORIG_SRC)/debian-quilt $(ORIG_SRC)/series-debian.conf $(CHROOT_DIR)/$(DIST_SRC)/$(DEBIAN_BUILD_DIRS)/patches)
-	cp -a $(PACKAGE_TGZ) $(PACKAGE_ORIG_TGZ)
-	tar xfz $(PACKAGE_ORIG_TGZ) -C $(CHROOT_DIR)/$(DIST_SRC)/$(DEBIAN) --strip-components=1 
+	tar cfz $(ORIG_FILE) --exclude-vcs -C $(CHROOT_DIR)/$(DIST_SRC)/salt .
+	cp -an $(CHROOT_DIR)/$(DIST_SRC)/salt/. $(CHROOT_DIR)/$(DIST_SRC)/debian.master
 
 # vim: filetype=make
