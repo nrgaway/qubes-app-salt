@@ -5,15 +5,28 @@ Maintainer: Debian Salt Team <pkg-salt-team@lists.alioth.debian.org>
 Uploaders: Joe Healy <joehealy@gmail.com>,
            Franklin G Mendoza <franklin.g.mendoza@gmail.com>,
            Andriy Senkovych <jolly_roger@itblog.org.ua>,
-	       Jason Mehring <nrgaway@gmail.com>
-Build-Depends: debhelper (>= 9.20120410~),
-               bash-completion,
-               python | python-all | python-dev | python-all-dev,
-               python-setuptools,
-               python-debian,
-               dh-python,
-               python-sphinx (>= 1.0),
-               dh-systemd (>= 1.4)
+           Jason Mehring <nrgaway@gmail.com>
+Build-Depends:
+    debhelper (>= 9.20120410~),
+    bash-completion,
+    python | python-all | python-dev | python-all-dev,
+    python-setuptools,
+    python-debian,
+    dh-python,
+    python-sphinx (>= 1.0),
+    dh-systemd (>= 1.4),
+    m2crypto,
+    python-crypto,
+    python-jinja2,
+    python-msgpack,
+    python-pip,
+    python-zmq (>= 13.1.0),
+    python-yaml,
+    python-requests,
+    python-unittest2,
+    python-mock,
+    git,
+    python-libcloud
 Standards-Version: 3.9.6
 Homepage: http://saltstack.org/
 X-Python-Version: 2.7
@@ -22,18 +35,28 @@ Vcs-Git: git://anonscm.debian.org/pkg-salt/salt.git
 
 Package: salt-common
 Architecture: all
-Depends: ${python:Depends},
-         ${misc:Depends},
-         python,
-         python-dateutil,
-         python-jinja2,
-         python-apt,
-         python-yaml,
-         python-tornado,
-         python-pkg-resources,
-         python-requests (>= 1.0.0)
-Recommends: lsb-release,
-            python-mako
+Depends:
+    ${python:Depends},
+    ${misc:Depends},
+    python,
+    python-dateutil,
+    python-jinja2,
+    python-apt,
+    python-yaml,
+    python-tornado,
+    python-pkg-resources,
+    python-requests (>= 1.0.0),
+    dmidecode,
+    pciutils,
+    debianutils,
+    yum-utils,
+    m2crypto,
+    python-crypto,
+    python-msgpack,
+    python-zmq
+Recommends:
+    lsb-release,
+    python-mako
 #Suggests: salt-doc (= ${source:Version})
 Breaks: python-mako (<< 0.7.0)
 Description: shared libraries that salt requires for all packages
@@ -58,13 +81,14 @@ Description: shared libraries that salt requires for all packages
 
 Package: salt-master
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         salt-common (= ${source:Version}),
-         python-m2crypto,
-         python-crypto,
-         python-msgpack,
-         python-zmq (>= 13.1.0)
+Depends:
+    ${misc:Depends},
+    ${python:Depends},
+    salt-common (= ${source:Version}),
+    python-m2crypto,
+    python-crypto,
+    python-msgpack,
+    python-zmq (>= 13.1.0)
 Recommends: python-git
 Description: remote manager to administer servers via salt
  salt is a powerful remote execution manager that can be used to
@@ -87,16 +111,18 @@ Description: remote manager to administer servers via salt
 
 Package: salt-minion
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         salt-common (= ${source:Version}),
-         python-m2crypto,
-         python-crypto,
-         python-msgpack,
-         python-zmq (>= 13.1.0),
-         dctrl-tools
-Recommends: dmidecode,
-            debconf-utils
+Depends:
+    ${misc:Depends},
+    ${python:Depends},
+    salt-common (= ${source:Version}),
+    python-m2crypto,
+    python-crypto,
+    python-msgpack,
+    python-zmq (>= 13.1.0),
+    dctrl-tools
+Recommends:
+    dmidecode,
+    debconf-utils
 Suggests: python-augeas
 Description: client package for salt, the distributed remote execution system
  salt is a powerful remote execution manager that can be used to
@@ -119,9 +145,10 @@ Description: client package for salt, the distributed remote execution system
 
 Package: salt-syndic
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         salt-master (= ${source:Version})
+Depends:
+    ${misc:Depends},
+    ${python:Depends},
+    salt-master (= ${source:Version})
 Description: master-of-masters for salt, the distributed remote execution system
  salt is a powerful remote execution manager that can be used to
  administer servers in a fast and efficient way.
@@ -144,10 +171,11 @@ Description: master-of-masters for salt, the distributed remote execution system
 
 Package: salt-ssh
 Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         salt-common (= ${source:Version}),
-         python-msgpack
+Depends:
+    ${misc:Depends},
+    ${python:Depends},
+    salt-common (= ${source:Version}),
+    python-msgpack
 Description: remote manager to administer servers via salt
  salt is a powerful remote execution manager that can be used to
  administer servers in a fast and efficient way.
@@ -200,10 +228,11 @@ Description: remote manager to administer servers via salt
 
 Package: salt-cloud
 Architecture: all
-Depends: ${python:Depends},
-         ${misc:Depends},
-         salt-common (= ${source:Version}),
-         python-libcloud (>= 0.14.1-1)
+Depends:
+    ${python:Depends},
+    ${misc:Depends},
+    salt-common (= ${source:Version}),
+    python-libcloud (>= 0.14.1-1)
 Suggests: python-botocore
 Recommends: python-netaddr
 Description: public cloud VM management system
@@ -212,10 +241,11 @@ Description: public cloud VM management system
 
 Package: salt-api
 Architecture: all
-Depends: ${python:Depends},
-         ${misc:Depends},
-         python,
-         salt-master
+Depends:
+    ${python:Depends},
+    ${misc:Depends},
+    python,
+    salt-master
 Recommends: python-cherrypy3
 Description: Generic, modular network access system
  a modular interface on top of Salt that can provide a variety of entry points
@@ -225,5 +255,3 @@ Description: Generic, modular network access system
  The Salt API system is used to expose the fundamental aspects of Salt control
  to external sources. salt-api acts as the bridge between Salt itself and
  REST, Websockets, etc.
-
-

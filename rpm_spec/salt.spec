@@ -276,10 +276,10 @@ rm -rf %{buildroot}
 %doc %{_mandir}/man1/salt-minion.1.*
 %doc %{_mandir}/man1/salt-unity.1.*
 %doc %{_mandir}/man1/spm.1.*
-#%doc %{_mandir}/man1/salt-proxy.1.*
+%doc %{_mandir}/man1/salt-proxy.1.*
 %{_bindir}/salt-minion
 %{_bindir}/salt-call
-#%{_bindir}/salt-proxy
+%{_bindir}/salt-proxy
 %{_bindir}/salt-unity
 %{_bindir}/spm
 %if ! (0%{?rhel} >= 7 || 0%{?fedora} >= 15)
