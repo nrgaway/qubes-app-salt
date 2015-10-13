@@ -1,0 +1,13 @@
+# vim: set syntax=markdown ts=4 sw=4 sts=4 textwidth=80 formatoptions+=w et :
+
+Adding Submodules to a Git Repository
+=====================================
+  Fortunately, adding a submodule to a git repository is actually quite simple.
+  For example, if I’m in the repository working directory of a new theme called
+  SampleTheme and need to add the billboard repository to the path
+  lib/billboard, I can do so with the following command:
+
+```
+git submodule add https://github.com/saltstack/salt.git salt
+```
+

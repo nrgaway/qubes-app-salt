@@ -1,2 +1,4 @@
 usr/lib/
 usr/bin/salt-call
+usr/bin/salt-unity
+usr/bin/spm
