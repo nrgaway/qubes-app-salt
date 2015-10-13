@@ -15,11 +15,11 @@ export SHELL=/bin/bash -e
 
 override_dh_auto_build:
 	dh_auto_build
-	make -C doc html
-	make -C doc man
+	#make -C doc html
+	#make -C doc man
 
 override_dh_auto_clean:
-	make -C doc clean
+	#make -C doc clean
 	dh_auto_clean
 
 override_dh_fixperms:
